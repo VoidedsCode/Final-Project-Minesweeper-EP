@@ -1,0 +1,26 @@
+/*for the CSS styling, I used online assistance to better figure out how to style the board, along
+with old assignments from CIS-216 I still have saved*/
+
+#game {
+    display: grid;
+    grid-template-columns: repeat(8, 30px);
+    gap: 2px;
+}
+
+.cell {
+    width: 30px;
+    height: 30px;
+    background: gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+}
+
+.revealed {
+    background: white;
+}
+
+.flag {
+    color: red;
+}
