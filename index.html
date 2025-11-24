@@ -7,8 +7,16 @@
         <link rel="stylesheet" href="minesweeperstyle.css">
     </head>
     <body>
-        <h1>Welcome to Minesweeper! Left-click to reveal tile, right-click to flag!</h1>
-        <div id="game"></div>
+        <div id="menu">
+            <h1>Welcome to Minesweeper! Left-click to reveal tile, right-click to flag!</h1>
+            <h2>Select a difficulty</h2>
+            <button onclick="startGame(8, 8, 10)">Beginner</button>
+            <button onclick="startGame(12, 12, 20)">Intermediate</button>
+            <button onclick="startGame(16, 16, 40)">Expert</button>
+        </div>
+        <div id="container" style="display:none">
+            <div id="game"></div>
+        </div>
         <script src="main.js"></script>
     </body>
     </html>

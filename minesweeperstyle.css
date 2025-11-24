@@ -3,14 +3,24 @@ with old assignments from CIS-216 I still have saved*/
 
 #game {
     display: grid;
-    grid-template-columns: repeat(8, 30px);
     gap: 2px;
+    margin: 20px auto;
+    padding: 10px;
+    background: #333;
+    border-radius: 6px;
+    width: fit-content;
+    grid-template-columns: repeat(var(--cols), 30px);
+    grid-template-rows: repeat(var(--rows), 30px);
+}
+
+#container{
+    text-align: center;
 }
 
 .cell {
     width: 30px;
     height: 30px;
-    background: gray;
+    background: #ccc;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -18,9 +28,20 @@ with old assignments from CIS-216 I still have saved*/
 }
 
 .revealed {
-    background: white;
+    background: #eee;
 }
 
-.flag {
-    color: red;
+.mine {
+    background: red;
+    color: white;
+}
+
+#menu {
+    text-align: center;
+    margin: 20px;
+}
+
+#menu button {
+    margin: 10px;
+    font-size: 10px;
 }
