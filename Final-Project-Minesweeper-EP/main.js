@@ -25,7 +25,6 @@ cells will show how many mines the tile is near.
 */
 
 //declaring variables and array
-
 let rows;
 let cols;
 let mines;
@@ -103,33 +102,59 @@ function buildGrid() {
     game.style.setProperty("--rows", rows);
 }
 
+//this function adds a number to the revealed cell that determines how many mines it is near.
+function countNearbyMines(row, col) {
+    let count = 0;
+
+    /*uses nested for-loops to determine how many mines are surrounding a cell, by creating a
+    variable that is one next to the cell vertically or horizontally*/
+    for (let r = row - 1; r <= row + 1; r++) {
+        for (let c = col - 1; c <= col + 1; c++) {
+
+            /*uses continue to end the loop if the current index of rows and/or columns
+            is either out of bounds or if it is the cell's location*/
+            if (r < 0 || r >= rows || c < 0 || c >= cols) continue;
+            if (r === row && c === col) continue;
+
+            //adds the mine to the number of mines near a cell
+            if (board[r][c].mine) {
+                count++;
+            }
+        }
+    }
+
+    return count;
+}
+
 //this function reveals the tiles and shows a bomb emoji if the tile was a mine, along with using
 //correlating sounds for an empty tile and a mine one
 let revealSound = new Audio('/assets/reveal.wav');
-let mineSound = new Audio('/assets/explosion.wav');
 function onReveal(r, c) {
     /*if(argument) return essentially acts as a break statement. It ends the function, if the
     argument is valid. For example, here, if the game is over, the onReveal function does not work*/
     if (gameOver) return;
+
     const tile = board[r][c];
     const cellDiv = document.getElementById(`cell-${r}-${c}`);
+    
     if (tile.flagged || tile.revealed) return;
     tile.revealed = true;
     revealedNum++;
     //used https://developer.mozilla.org/en-US/docs/Web/API/Element/classList to research classList
     cellDiv.classList.add("revealed");
-    cellDiv.textContent = tile.mine ? "💣" : ""; //adds mine cell to revealed class and creates an emoji within it, using a ternary operator
-
-    //if tile is a mine, it uses the game over function and plays an explosion sound
-    //if the tile is clear, it plays a default sound
     if (tile.mine) {
-        mineSound.play();
+        cellDiv.textContent = "💣"; //adds mine cell to revealed class and creates an emoji within it
         ifGameOver(); //triggers game over function if revealed tile is a mine
         return;
     }
-    else{
-        revealSound.play();
-    }
+    /*uses the countNearbyMines function and assigns a number to the revealed cell's content
+    if the cell is near a mine*/
+    let nearby=countNearbyMines(r,c);
+    tile.near=nearby;
+    cellDiv.innerText = nearby > 0 ? nearby : "";
+
+    //if the tile is clear, it plays a default sound and checks if the player won
+    revealSound.play();
     checkWin();
 }
 
@@ -152,10 +177,11 @@ function onFlag(menu, r, c) {
     cell.textContent = tile.flagged ? "🚩" : "";
     flagSound.play()
 }
-
+let mineSound = new Audio('/assets/explosion.wav');
 function ifGameOver(){
     gameOver=true;
     console.log("Player has revealed a mine!");
+    mineSound.play();
     //checks every cell for mines using a nested for loop
     for (let r=0; r < rows; r++){
         for (let c=0; c<cols; c++){
